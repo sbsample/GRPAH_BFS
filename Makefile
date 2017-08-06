@@ -5,24 +5,27 @@
 
 CC = gcc
 CFLAGS = -g -Wall -Werror -std=c99
-OBJECTS = Lex.o List.o
+OBJECTS = Graph.o List.o FindPath.o
 
 .PHONY: all
-all: Lex
+all: FindPath
 
-Lex	:	$(OBJECTS)
-	$(CC) $(OBJECTS) -o Lex
+FindPath	:	$(OBJECTS)
+	$(CC) $(OBJECTS) -o FindPath
 
-Lex.o :	Lex.c
-	$(CC) $(CFLAGS) -c Lex.c
+FindPath.o :	FindPath.c
+	$(CC) $(CFLAGS) -c FindPath.c
 
 List.o : List.c
 	$(CC) $(CFLAGS) -c List.c
+
+Graph.o : Graph.c
+	$(CC) $(CFLAGS) -c Graph.c
 
 
 
 .PHONY: clean
 clean:
-	rm $(OBJECTS) Lex
+	rm $(OBJECTS) FindPath
 
 
