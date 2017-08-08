@@ -86,7 +86,7 @@ int getOrder(Graph G)
 // returns size of graph
 int getSize(Graph G)
 {
-    printf("Printing Size: %d\n",G -> size );
+   
     return G -> size;
 }
 // getSource()
@@ -101,27 +101,31 @@ int getSource(Graph G)
 // returns the parent of of input u
 int getParent(Graph G, int u)
 {
-    if (G -> source == NIL)
-    {
-        return NIL;
-    }
+    
     return G -> parent[u];
 }
 int getDist(Graph G, int u)
 {
+    
     return G -> distance[u];
 }
 void getPath(List L, Graph G, int u)
 {
-    if (G -> size == 0 && getParent(G, u) == NIL)
+    
+    
+    if(u == G -> source) 
     {
-        append(L, NIL);
-    }
-    if(u == G -> source) {
         append(L, u);
-    } else if(G -> parent[u] != NIL) {
+    } 
+    else if(G -> parent[u] != NIL) 
+    {
+        
         getPath(L, G, G -> parent[u]);
         append(L, u);
+    }
+    else
+    {
+        append(L, NIL);
     }
     // List pathList = newList();
     // for(int i = u; i != G -> source && i != NIL; i = getParent(G,i))
@@ -166,6 +170,7 @@ void addEdge(Graph G, int u, int v)
 {
     addArc(G,u,v);
     addArc(G,v,u);
+    G -> size--;
 }
 void addArc(Graph G, int u, int v)
 {   printf("addArc called\n");
@@ -179,21 +184,21 @@ void addArc(Graph G, int u, int v)
 
         if (length(G -> adjLists[u]) == 0)
         {
-            // printf("addArc size = 0 for \n");
+            printf("addArc size = 0 for insert value %d \n", v);
             append(G -> adjLists[u], v);
             break;
 
         }
         else if (get(G -> adjLists[u]) > v)
         {
-            // printf("addArc else if get value: %d\n", get(G -> adjLists[u]));
+            printf("addArc else if insert value: %d\n", v);
             insertBefore(G -> adjLists[u], v);
             break;
 
         }
         else
         {
-            //
+            printf("addArc else insert value: %d\n", v);
             insertAfter(G -> adjLists[u], v);
             break;
 
@@ -217,25 +222,24 @@ void BFS(Graph G, int s)
 
     List L = newList();
     append(L, s);
-    printf("BFS append initial\n");
     for (moveFront(L); index(L) >= 0; moveNext(L)) {
-        printf("BFS for loop 1");
-         int temp = get(L);
-         printf("BFS get called on L\n");
-        for (moveFront(G -> adjLists[temp]); index(G -> adjLists[temp]) >= 0; moveNext(G ->adjLists[temp]))
+        int u = get(L);
+        if ( length(G -> adjLists[u]) == 0)
         {
-            printf("BFS for loop 1");
-            int temp2 = get(G -> adjLists[temp]);
-            printf("BFS get called on G -> adjLists[temp]\n");
-            if (G -> color[temp2] == 0)
+            return;
+        }
+        for (moveFront(G -> adjLists[u]); index(G -> adjLists[u]) >= 0; moveNext(G -> adjLists[u]))
+        {
+            int v = get(G -> adjLists[u]);
+            if (G -> color[v] == 0)
             {
-                G -> color[temp2] = 1;
-                G -> distance[temp2] = G -> distance[temp] + 1;
-                G -> parent[temp2] = temp;
-                append(L, temp2);
+                G -> color[v] = 1;
+                G -> distance[v] = G -> distance[u] + 1;
+                G -> parent[v] = u;
+                append(L, v);
             }
         }
-        G -> color[temp] = 2;
+        G -> color[u] = 2;
     }
     freeList(&L); // free the list
 }
