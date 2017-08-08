@@ -3,6 +3,9 @@
 # include <stdlib.h>
 # include "List.h"
 /*** Constructors-Destructors ***/
+#define INF -2
+#define NIL -1
+
 typedef struct GraphObj* Graph;
 Graph newGraph(int n);
 void freeGraph(Graph* pG);

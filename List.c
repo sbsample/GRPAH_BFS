@@ -97,6 +97,7 @@ int back(List L)
 //returns node at cursor
 int get(List L)
 {
+	printf("This is get L -> index : %d\n",L -> index -> value);
 	return L -> index -> value;
 }
 // equals()
@@ -306,7 +307,7 @@ void insertAfter(List L, int data)
 // deletes node at front of list
 void deleteFront(List L)
 {
-
+	Node temp = L -> front;
 	if (L -> length > 1 && L -> cursor == -1)
 	{
 
@@ -351,13 +352,18 @@ void deleteFront(List L)
 		L -> length = 0;
 
 	}
+	if(temp != NULL)
+  	{
+  		free(temp);
+  	}
+	temp = NULL;
+
 }
 //deleteBack()
 //deletes back of the list
 void deleteBack(List L)
 {
 
-	Node temp = L -> back;
 	if (L -> length > 1 && L -> cursor < L -> length - 1)
 	{
 		L -> back = L -> back -> previous;

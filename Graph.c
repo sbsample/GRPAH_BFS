@@ -2,6 +2,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include "List.h"
+# include "Graph.h"
 /*** Constructors-Destructors ***/
 
 #define INF -2
@@ -46,11 +47,11 @@ Graph newGraph(int n)
 // frees the graph in memory
 void freeGraph(Graph* pG)
 {
-    if (pG != NULL && *pG != NULL)
-    {
-        for (int i = 1; i < pG -> size; i++ )
+    // if (pG != NULL && *pG != NULL)
+    // {
+        for (int i = 1; i < (*pG) -> size; i++ )
         {
-            freeList(&(*pG) -> adjLists[i]);
+            freeList((*pG) -> adjLists);
         }
         free((*pG) -> adjLists);
         free((*pG) -> color);
@@ -64,7 +65,7 @@ void freeGraph(Graph* pG)
 
         free(*pG);
         *pG = NULL;
-    }
+    // }
 }
 
 /*** Access functions ***/
@@ -85,11 +86,8 @@ int getOrder(Graph G)
 // returns size of graph
 int getSize(Graph G)
 {
-    if (G -> size == 0)
-    {
-        return NIL;
-    }
-    return G -> size
+  
+    return G -> size;
 }
 // getSource()
 // returns the most recently used Vertex
@@ -118,9 +116,9 @@ int getDist(Graph G, int u)
 }
 void getPath(List L, Graph G, int u)
 {
-    if (G -> distance[i] = INF && G -> parent[i] = NIL)
+    if (G -> size == 0 && getParent(G, u) == NIL)
     {
-        append(L, NIL)
+        append(L, NIL);
     }
     if(u == G -> source) {
         append(L, u);
@@ -159,9 +157,9 @@ void getPath(List L, Graph G, int u)
 /*** Manipulation procedures ***/
 void makeNull(Graph G)
 {
-    for (int i = 1; i < G -> size, i++)
+    for (int i = 1; i < G -> size; i++)
     {
-        freeList(G -> adjLists[i]);
+        freeList(&G -> adjLists[i]);
         G -> distance[i] = INF;
         G -> parent[i] = NIL;
         G -> color[i] = 0;
@@ -169,9 +167,37 @@ void makeNull(Graph G)
 }
 void addEdge(Graph G, int u, int v)
 {
-
+    addArc(G,u,v);
+    addArc(G,v,u);
 }
-void addArc(Graph G, int u, int v);
+void addArc(Graph G, int u, int v)
+{   printf("addArc called\n");
+    moveFront(G -> adjLists[u]);
+    for (moveFront(G -> adjLists[u]); index(G -> adjLists[u]) != -1; moveNext(G -> adjLists[u]))
+    {
+        printf("addArc while loop\n");
+        printf("addArc searching for %d\n", v);
+        printf("addArc search get %d\n", get(G -> adjLists[u]) );
+        printf("addArc search index %d\n", index(G -> adjLists[u]) );
+
+        // moveNext(G-> adjLists[u]);
+        if (G -> size == 0)
+        {
+            append(G -> adjLists[u], v);
+            return;
+        }
+        else if (get(G -> adjLists[u]) > v)
+        {
+            insertBefore(G -> adjLists[u], v);
+            return;
+        }
+        else
+        {
+            insertAfter(G -> adjLists[u], v);
+            return;
+        }
+    }
+}
 void BFS(Graph G, int s)
 {
     for(int i = 1; i <= getOrder(G); i++)
@@ -187,7 +213,7 @@ void BFS(Graph G, int s)
     List L = newList();
     append(L, s);
     for (moveFront(L); index(L) >= 0; moveNext(L)) {
-         int temp = getElement(L);
+         int temp = get(L);
         for (moveFront(G -> adjLists[temp]); index(G -> adjLists[temp]) >= 0; moveNext(G ->adjLists[temp]))
         {
             int temp2 = get(G -> adjLists[temp]);
