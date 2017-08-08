@@ -86,17 +86,14 @@ int getOrder(Graph G)
 // returns size of graph
 int getSize(Graph G)
 {
-  
+    printf("Printing Size: %d\n",G -> size );
     return G -> size;
 }
 // getSource()
 // returns the most recently used Vertex
 int getSource(Graph G)
 {
-    if (G -> source == NIL)
-    {
-        return NIL;
-    }
+
     return G -> source;
 }
 
@@ -175,28 +172,35 @@ void addArc(Graph G, int u, int v)
     moveFront(G -> adjLists[u]);
     for (moveFront(G -> adjLists[u]); index(G -> adjLists[u]) != -1; moveNext(G -> adjLists[u]))
     {
-        printf("addArc while loop\n");
-        printf("addArc searching for %d\n", v);
-        printf("addArc search get %d\n", get(G -> adjLists[u]) );
-        printf("addArc search index %d\n", index(G -> adjLists[u]) );
+        // printf("addArc searching for %d\n", v);
+        // // printf("addArc search get %d\n", get(G -> adjLists[u]) );
+        // printf("addArc search index %d\n", index(G -> adjLists[u]) );
 
-        // moveNext(G-> adjLists[u]);
-        if (G -> size == 0)
+
+        if (length(G -> adjLists[u]) == 0)
         {
+            // printf("addArc size = 0 for \n");
             append(G -> adjLists[u], v);
-            return;
+            break;
+
         }
         else if (get(G -> adjLists[u]) > v)
         {
+            // printf("addArc else if get value: %d\n", get(G -> adjLists[u]));
             insertBefore(G -> adjLists[u], v);
-            return;
+            break;
+
         }
         else
         {
+            //
             insertAfter(G -> adjLists[u], v);
-            return;
+            break;
+
         }
+
     }
+    G -> size++;
 }
 void BFS(Graph G, int s)
 {
@@ -206,17 +210,23 @@ void BFS(Graph G, int s)
         G -> distance[i] = INF;
         G -> parent[i] = NIL;
     }
-    G -> source = s;
-    G -> color[s] = 1;
     G -> distance[s] = 0;
     G -> parent[s] = NIL;
+    G -> source = s;
+    G -> color[s] = 1;
+
     List L = newList();
     append(L, s);
+    printf("BFS append initial\n");
     for (moveFront(L); index(L) >= 0; moveNext(L)) {
+        printf("BFS for loop 1");
          int temp = get(L);
+         printf("BFS get called on L\n");
         for (moveFront(G -> adjLists[temp]); index(G -> adjLists[temp]) >= 0; moveNext(G ->adjLists[temp]))
         {
+            printf("BFS for loop 1");
             int temp2 = get(G -> adjLists[temp]);
+            printf("BFS get called on G -> adjLists[temp]\n");
             if (G -> color[temp2] == 0)
             {
                 G -> color[temp2] = 1;
@@ -225,7 +235,7 @@ void BFS(Graph G, int s)
                 append(L, temp2);
             }
         }
-        G -> color[temp] = 2; // set color to black
+        G -> color[temp] = 2;
     }
     freeList(&L); // free the list
 }

@@ -97,7 +97,7 @@ int back(List L)
 //returns node at cursor
 int get(List L)
 {
-	printf("This is get L -> index : %d\n",L -> index -> value);
+	printf("%d\n", L -> index -> value );
 	return L -> index -> value;
 }
 // equals()
