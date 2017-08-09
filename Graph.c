@@ -49,9 +49,9 @@ void freeGraph(Graph* pG)
 {
     // if (pG != NULL && *pG != NULL)
     // {
-        for (int i = 1; i < (*pG) -> size; i++ )
+        for (int i = 1; i < getOrder(*pG); i++ )
         {
-            freeList((*pG) -> adjLists);
+            freeList(&(*pG) -> adjLists[i]);
         }
         free((*pG) -> adjLists);
         free((*pG) -> color);
@@ -86,14 +86,12 @@ int getOrder(Graph G)
 // returns size of graph
 int getSize(Graph G)
 {
-   
     return G -> size;
 }
 // getSource()
 // returns the most recently used Vertex
 int getSource(Graph G)
 {
-
     return G -> source;
 }
 
@@ -101,18 +99,18 @@ int getSource(Graph G)
 // returns the parent of of input u
 int getParent(Graph G, int u)
 {
-    
     return G -> parent[u];
 }
+// getDist()
+// returns the distance from the most recent BFS source
 int getDist(Graph G, int u)
 {
-    
     return G -> distance[u];
 }
+// getPath()
+// appends to List L the path from u
 void getPath(List L, Graph G, int u)
 {
-    
-    
     if(u == G -> source) 
     {
         append(L, u);
@@ -156,6 +154,8 @@ void getPath(List L, Graph G, int u)
 
 }
 /*** Manipulation procedures ***/
+// makeNull()
+// Resets Graph G
 void makeNull(Graph G)
 {
     for (int i = 1; i < G -> size; i++)
@@ -166,47 +166,45 @@ void makeNull(Graph G)
         G -> color[i] = 0;
     }
 }
+// addEdge()
+// adds from u to v and v to u
 void addEdge(Graph G, int u, int v)
 {
     addArc(G,u,v);
     addArc(G,v,u);
     G -> size--;
 }
+// addArc()
+// adds to Adj list u to v
 void addArc(Graph G, int u, int v)
-{   printf("addArc called\n");
+{  
     moveFront(G -> adjLists[u]);
     for (moveFront(G -> adjLists[u]); index(G -> adjLists[u]) != -1; moveNext(G -> adjLists[u]))
     {
-        // printf("addArc searching for %d\n", v);
-        // // printf("addArc search get %d\n", get(G -> adjLists[u]) );
-        // printf("addArc search index %d\n", index(G -> adjLists[u]) );
-
 
         if (length(G -> adjLists[u]) == 0)
         {
-            printf("addArc size = 0 for insert value %d \n", v);
+            // printf("addArc size = 0 for insert value %d \n", v);
             append(G -> adjLists[u], v);
             break;
-
         }
         else if (get(G -> adjLists[u]) > v)
         {
-            printf("addArc else if insert value: %d\n", v);
+            // printf("addArc else if insert value: %d\n", v);
             insertBefore(G -> adjLists[u], v);
             break;
-
         }
         else
         {
-            printf("addArc else insert value: %d\n", v);
             insertAfter(G -> adjLists[u], v);
             break;
-
         }
 
     }
     G -> size++;
 }
+// BFS()
+// does breadth first search from s
 void BFS(Graph G, int s)
 {
     for(int i = 1; i <= getOrder(G); i++)
@@ -244,4 +242,12 @@ void BFS(Graph G, int s)
     freeList(&L); // free the list
 }
 /*** Other operations ***/
-void printGraph(FILE* out, Graph G);
+//printGraph()
+// prints out graph
+void printGraph(FILE* out, Graph G)
+{
+    for (int i = 1; i <= getOrder(G); i++) {
+        fprintf(out,"%d: ",i);
+        printList(out, G -> adjLists[i]);
+    }
+}

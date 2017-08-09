@@ -152,10 +152,7 @@ void clear(List L)
 			L -> front -> previous = NULL;
 			temp -> next = NULL;
 			free(temp);
-
-
 		}
-
 		L -> cursor = -1;
 		L -> length = 0;
 
@@ -392,6 +389,12 @@ void deleteBack(List L)
 		L -> length = 0;
 
 	}
+	if(temp != NULL)
+  	{
+  		free(temp);
+  	}
+  	
+	temp = NULL;
 
 }
 //delete()
@@ -441,14 +444,19 @@ void delete(List L)
 List copyList(List L)
 {
 	List newL = newList();
-
+	if (length(L) == 0)
+	{
+		printf("if L length = 0\n");
+		return  newL;
+	}
 	Node tempNode = L -> front;
 	while (tempNode != NULL)
 	{
 		append(newL, tempNode -> value);
 		tempNode = tempNode-> next;
 	}
-
+	printf("L length : %d \n", L -> length);
+	printf("newL length : %d \n", newL -> length);
 	return newL;
 }
 //printList
